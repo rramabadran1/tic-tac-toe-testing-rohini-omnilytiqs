@@ -80,6 +80,26 @@ public class TicTacToeBoard {
     return (tileCount==sideLen);
   }
 
+  private boolean checkUnreachableState(boolean hasXWin, boolean hasOWin) {
+    int numXMoves = 0;
+    int numOMoves = 0;
+
+    for (int tileIndex = 0; tileIndex < board.length(); tileIndex++) {
+      if (board.charAt(tileIndex) == 'X') {
+        numXMoves++;
+      } else if (board.charAt(tileIndex) == 'O') {
+        numOMoves++;
+      }
+    }
+
+    boolean hasEqualNumMoves = (numOMoves == numXMoves);
+    boolean hasOneMoreXMove = (numXMoves == numOMoves + 1);
+
+    // covers all unreachable states: O plays after X wins, X plays after O wins, or neither equal num moves
+    // nor one more X move
+    return (hasEqualNumMoves && hasXWin) || (hasOneMoreXMove && hasOWin)
+            || (!hasEqualNumMoves && !hasOneMoreXMove);
+  }
   /**
    * Checks the state of the board (unreachable, no winner, X wins, or O wins)
    * @return an enum value corresponding to the board evaluation
@@ -91,38 +111,15 @@ public class TicTacToeBoard {
     System.out.println(hasXWin);
     System.out.println(hasOWin);
 
-    int numXMoves = 0;
-    int numOMoves = 0;
-    for (int tileIndex = 0; tileIndex < board.length(); tileIndex++) {
-      if (board.charAt(tileIndex) == 'X') {
-        numXMoves++;
-      } else if (board.charAt(tileIndex) == 'O') {
-        numOMoves++;
-      }
-    }
-    boolean hasEqualNumMoves = (numOMoves == numXMoves);
-    boolean hasOneMoreXMove = (numXMoves == numOMoves + 1);
-
-    // O plays after X wins --> impossible
-    if (hasEqualNumMoves && hasXWin) {
+    if (checkUnreachableState(hasXWin, hasOWin)) {
       return Evaluation.UnreachableState;
     }
-    // X plays after O wins --> impossible
-    if (hasOneMoreXMove && hasOWin) {
-      return Evaluation.UnreachableState;
-    }
-    // Someone played too many moves --> impossible
-    if (!hasEqualNumMoves && !hasOneMoreXMove){
-      return Evaluation.UnreachableState;
-    }
-    // Win scenarios
     if (hasOWin) {
       return Evaluation.Owins;
     }
     if (hasXWin) {
       return Evaluation.Xwins;
     }
-    // otherwise no winner
     return Evaluation.NoWinner;
   }
 }

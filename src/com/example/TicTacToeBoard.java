@@ -30,10 +30,9 @@ public class TicTacToeBoard {
     this.sideLen = sideLen;
   }
 
-  private boolean findWinByPlayer(char playerTile) {
+  private boolean checkRowWinByPlayer(char playerTile) {
     int tileCount;
 
-    // check rows
     for (int rowIdx = 0; rowIdx < board.length(); rowIdx += sideLen) {
       tileCount = 0;
       for (int colIdx = rowIdx; colIdx < rowIdx+ sideLen; colIdx++) {
@@ -45,8 +44,12 @@ public class TicTacToeBoard {
         return true;
       }
     }
+    return false;
+  }
 
-    // check cols
+  private boolean checkColWinByPlayer(char playerTile) {
+    int tileCount;
+
     for (int colIdx = 0; colIdx < sideLen; colIdx++) {
       tileCount = 0;
       for (int rowIdx = colIdx; rowIdx < board.length(); rowIdx += sideLen) {
@@ -58,26 +61,34 @@ public class TicTacToeBoard {
         return true;
       }
     }
+    return false;
+  }
 
-    // check major diag
-    tileCount = 0;
+  private boolean checkMajorDiagWinByPlayer(char playerTile) {
+    int tileCount=0;
+
     for (int majorDiagIdx = 0; majorDiagIdx < board.length(); majorDiagIdx += sideLen + 1) {
       if (board.charAt(majorDiagIdx) == playerTile) {
         tileCount++;
       }
     }
-    if (tileCount == sideLen) {
-      return true;
-    }
+    return tileCount == sideLen;
+  }
 
-    // check minor diag
-    tileCount = 0;
+  private boolean checkMinorDiagWinByPlayer(char playerTile) {
+    int tileCount=0;
+
     for (int minorDiagIdx = sideLen - 1; minorDiagIdx < board.length(); minorDiagIdx += sideLen - 1) {
       if (board.charAt(minorDiagIdx) == playerTile) {
         tileCount++;
       }
     }
-    return (tileCount==sideLen);
+    return tileCount == sideLen;
+  }
+
+  private boolean findWinByPlayer(char playerTile) {
+    return checkRowWinByPlayer(playerTile) || checkColWinByPlayer(playerTile)
+            || checkMajorDiagWinByPlayer(playerTile) || checkMinorDiagWinByPlayer(playerTile);
   }
 
   private boolean checkUnreachableState(boolean hasXWin, boolean hasOWin) {
@@ -100,6 +111,7 @@ public class TicTacToeBoard {
     return (hasEqualNumMoves && hasXWin) || (hasOneMoreXMove && hasOWin)
             || (!hasEqualNumMoves && !hasOneMoreXMove);
   }
+
   /**
    * Checks the state of the board (unreachable, no winner, X wins, or O wins)
    * @return an enum value corresponding to the board evaluation

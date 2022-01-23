@@ -187,9 +187,6 @@ public class TicTacToeBoard {
     boolean hasXWin = findWinByPlayer('X');
     boolean hasOWin = findWinByPlayer('O');
 
-    System.out.println(hasXWin);
-    System.out.println(hasOWin);
-
     if (checkUnreachableState(hasXWin, hasOWin)) {
       return Evaluation.UnreachableState;
     }

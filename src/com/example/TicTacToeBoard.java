@@ -37,6 +37,10 @@ public class TicTacToeBoard {
     this.sideLen = sideLen;
   }
 
+  public String getBoard() {
+    return this.board;
+  }
+
   /**
    * Checks for n-in-a-row win by player
    *

@@ -4,13 +4,14 @@ package com.example;
  * Takes in and evaluates a string representing a tic tac toe board.
  */
 public class TicTacToeBoard {
-  private int sideLen;
+  final int sideLen;
   private String board;
 
   /**
    * Loads a string representing an nxn board into the TicTacToeBoard class.
    *
-   * @param board The string representing the board
+   * @param board The case-insensitive string representing the board. X and O player tiles, and all other
+   *              characters are empty spaces.
    * @param sideLen An integer representing the dimension of the board
    */
   public TicTacToeBoard(String board, int sideLen) {
@@ -23,17 +24,17 @@ public class TicTacToeBoard {
     }
 
     // Using user input to build board string of only X, O, or spaces
-    StringBuilder gameBoardStrBuilder = new StringBuilder();
+    StringBuilder boardStrBuilder = new StringBuilder();
     for (int i=0; i<board.length(); i++) {
       if (board.charAt(i) == 'x' || board.charAt(i) == 'X') {
-        gameBoardStrBuilder.append("X");
+        boardStrBuilder.append("X");
       } else if (board.charAt(i) == 'o' || board.charAt(i) == 'O') {
-        gameBoardStrBuilder.append("O");
+        boardStrBuilder.append("O");
       } else {
-        gameBoardStrBuilder.append(" ");
+        boardStrBuilder.append(" ");
       }
     }
-    this.board = gameBoardStrBuilder.toString();
+    this.board = boardStrBuilder.toString();
     this.sideLen = sideLen;
   }
 
@@ -54,7 +55,7 @@ public class TicTacToeBoard {
      * there is a winning placement by row */
     for (int rowIdx = 0; rowIdx < board.length(); rowIdx += sideLen) {
       tileCount = 0;
-      for (int colIdx = rowIdx; colIdx < rowIdx+ sideLen; colIdx++) {
+      for (int colIdx = rowIdx; colIdx < rowIdx + sideLen; colIdx++) {
         if (board.charAt(colIdx) == playerTile) {
           tileCount++;
         }
